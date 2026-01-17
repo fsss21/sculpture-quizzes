@@ -1,0 +1,15 @@
+{
+  "workshop": {
+    "background": "/sounds/workshop-ambient.mp3",
+    "clayWork": "/sounds/clay-working.mp3",
+    "toolKnock": "/sounds/tool-knock.mp3"
+  },
+  "quizzes": {
+    "correct": "/sounds/success.mp3",
+    "incorrect": "/sounds/error.mp3",
+    "menuNavigation": "/sounds/menu-click.mp3"
+  },
+  "ambient": {
+    "music": "/sounds/ambient-music.mp3"
+  }
+}
