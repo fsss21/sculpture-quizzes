@@ -1,5 +1,5 @@
 {
-  "title": "Узнай инструмент по описанию",
+  "title": "Узнай инструмент <br/> по описанию",
   "subtitle": "Какой инструмент нужен для этой задачи?",
   "questions": [
     {
@@ -9,13 +9,13 @@
         {
           "text": "Скарпель",
           "correct": true,
-          "image": "/images/tools/scarper.jpg",
+          "image": "/images/tools/place_holder.png",
           "explanation": "Скарпель - это инструмент для грубой обработки камня, используется для снятия больших объемов материала."
         },
         {
           "text": "Канавочник",
           "correct": false,
-          "image": "/images/tools/groover.jpg",
+          "image": "/images/tools/place_holder.png",
           "explanation": "Канавочник используется для создания узких углублений, а не для грубой обработки."
         },
         {

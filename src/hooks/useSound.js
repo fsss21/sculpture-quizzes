@@ -44,9 +44,11 @@ export function useSound(soundEnabled) {
     return () => {
       if (ambientSoundRef.current) {
         ambientSoundRef.current.pause()
+        ambientSoundRef.current = null
       }
       if (workshopSoundRef.current) {
         workshopSoundRef.current.pause()
+        workshopSoundRef.current = null
       }
     }
   }, [soundEnabled])

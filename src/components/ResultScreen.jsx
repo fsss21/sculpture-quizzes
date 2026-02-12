@@ -1,15 +1,9 @@
 import styles from './ResultScreen.module.css'
 
 function ResultScreen({ score, totalQuestions, onRestart, onBackToMenu, soundEnabled }) {
-  const percentage = Math.round((score / totalQuestions) * 100)
+  const safeTotal = totalQuestions > 0 ? totalQuestions : 1
+  const percentage = Math.round((score / safeTotal) * 100)
   
-  const getResultIcon = () => {
-    if (percentage >= 90) return '🏆'
-    if (percentage >= 70) return '⭐'
-    if (percentage >= 50) return '👍'
-    return '📚'
-  }
-
   const getResultText = () => {
     if (percentage >= 90) return 'Отлично!'
     if (percentage >= 70) return 'Хорошо!'
@@ -17,11 +11,10 @@ function ResultScreen({ score, totalQuestions, onRestart, onBackToMenu, soundEna
     return 'Продолжайте изучать!'
   }
 
-  const getResultColor = () => {
-    if (percentage >= 90) return '#4caf50'
-    if (percentage >= 70) return '#2196f3'
-    if (percentage >= 50) return '#ff9800'
-    return '#f44336'
+  const getResultLevelClass = () => {
+    if (percentage >= 70) return styles.result_excellent  // отлично или хорошо — зелёный
+    if (percentage >= 50) return styles.result_okay       // средний — жёлтый
+    return styles.result_poor                              // плохо — красный
   }
 
   const handleButtonClick = (callback) => {
@@ -35,12 +28,8 @@ function ResultScreen({ score, totalQuestions, onRestart, onBackToMenu, soundEna
 
   return (
     <div className={styles.container}>
-      <div className={styles.card}>
-        <div className={styles.resultIcon} style={{ color: getResultColor() }}>
-          {getResultIcon()}
-        </div>
-        
-        <h1 className={styles.title} style={{ color: getResultColor() }}>
+      <div className={`${styles.card} ${getResultLevelClass()}`}>
+        <h1 className={styles.title}>
           {getResultText()}
         </h1>
         
@@ -55,13 +44,15 @@ function ResultScreen({ score, totalQuestions, onRestart, onBackToMenu, soundEna
         </div>
 
         <div className={styles.buttons}>
-          <button 
+          <button
+            type="button"
             className={styles.button}
             onClick={() => handleButtonClick(onRestart)}
           >
             Пройти снова
           </button>
-          <button 
+          <button
+            type="button"
             className={styles.buttonSecondary}
             onClick={() => handleButtonClick(onBackToMenu)}
           >

@@ -3,19 +3,39 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   padding: 20px;
+  position: relative;
+  background-image: url('../assets/result_screen_img.png');
+  background-size: cover;
+  background-position: center;
 }
 
+
 .card {
-  background: white;
+  background: none;
   border-radius: 16px;
   padding: 60px 40px;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
   text-align: center;
-  max-width: 500px;
+  max-width: 700px;
   width: 100%;
   animation: slideIn 0.5s ease;
+  position: relative;
+  z-index: 1;
+}
+
+/* отлично или хорошо — зелёный */
+.result_excellent .scoreNumber {
+  color: #465E44;
+}
+
+/* средний — жёлтый */
+.result_okay .scoreNumber {
+  color: #e6b800;
+}
+
+/* плохо — красный */
+.result_poor .scoreNumber{
+  color: #813334;
 }
 
 @keyframes slideIn {
@@ -48,6 +68,8 @@
   font-size: 2.5rem;
   margin: 0 0 30px 0;
   font-weight: 700;
+  text-transform: uppercase;
+  color: #453A26;
 }
 
 .score {
@@ -61,7 +83,7 @@
 }
 
 .scoreNumber {
-  color: #667eea;
+  color: #fff;
 }
 
 .scoreDivider {
@@ -69,13 +91,14 @@
 }
 
 .scoreTotal {
-  color: #999;
+  color: #465E44;
 }
 
 .percentage {
   font-size: 1.2rem;
-  color: #666;
+  color: #453A26;
   margin-bottom: 40px;
+  font-family: 'Raleway', sans-serif;
 }
 
 .buttons {
@@ -85,20 +108,22 @@
 }
 
 .button {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
-  border: none;
+  font-family: 'Anticva', sans-serif;
+  background: rgb(93, 30, 0, 15%);
+  color: #000;
+  border: solid #5D1E00 2px;
   padding: 16px 32px;
   font-size: 1.1rem;
-  border-radius: 8px;
+  border-radius: 2px;
   cursor: pointer;
-  font-weight: 600;
+  font-weight: normal;
   transition: transform 0.2s, box-shadow 0.2s;
+  text-transform: uppercase;
+  width: 100%;
 }
 
 .button:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
 }
 
 .button:active {
@@ -106,22 +131,22 @@
 }
 
 .buttonSecondary {
-  background: white;
-  color: #667eea;
-  border: 2px solid #667eea;
+  font-family: 'Anticva', sans-serif;
+  background: rgb(93, 30, 0, 15%);
+  color: #000;
+  border: solid #5D1E00 2px;
   padding: 16px 32px;
   font-size: 1.1rem;
-  border-radius: 8px;
+  border-radius: 2px;
   cursor: pointer;
-  font-weight: 600;
-  transition: all 0.2s;
+  font-weight: normal;
+  transition: transform 0.2s, box-shadow 0.2s;
+  text-transform: uppercase;
+  width: 100%;
 }
 
 .buttonSecondary:hover {
-  background: #667eea;
-  color: white;
   transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(102, 126, 234, 0.2);
 }
 
 .buttonSecondary:active {

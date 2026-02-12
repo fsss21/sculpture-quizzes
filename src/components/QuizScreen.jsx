@@ -1,19 +1,24 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import styles from './QuizScreen.module.css'
 import api from '../utils/api'
 
 function QuizScreen({ quizData, quizType, onQuizComplete, soundEnabled }) {
+  const isToolsQuiz = quizType === 'tools'
+  const gameClass = isToolsQuiz ? styles.game_tool : styles.game_sculptor
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0)
   const [selectedAnswer, setSelectedAnswer] = useState(null)
   const [showResult, setShowResult] = useState(false)
   const [score, setScore] = useState(0)
   const [answeredQuestions, setAnsweredQuestions] = useState([])
 
-  const currentQuestion = quizData.questions[currentQuestionIndex]
+  const questions = quizData?.questions ?? []
+  const hasQuestions = questions.length > 0
+  const currentQuestion = hasQuestions ? questions[currentQuestionIndex] : null
+  const hasTaskField = hasQuestions && questions[0].task != null && questions[0].task !== ''
 
   const handleAnswerSelect = (answerIndex) => {
-    if (showResult) return
-    
+    if (showResult || !currentQuestion) return
+
     setSelectedAnswer(answerIndex)
     const isCorrect = currentQuestion.answers[answerIndex].correct
 
@@ -21,7 +26,7 @@ function QuizScreen({ quizData, quizType, onQuizComplete, soundEnabled }) {
       const soundPath = isCorrect ? '/sounds/success.mp3' : '/sounds/error.mp3'
       const audio = new Audio(soundPath)
       audio.volume = 0.5
-      audio.play().catch(() => {})
+      audio.play().catch(() => { })
     }
 
     if (isCorrect) {
@@ -50,46 +55,63 @@ function QuizScreen({ quizData, quizType, onQuizComplete, soundEnabled }) {
   }
 
   const handleNext = () => {
-    if (currentQuestionIndex < quizData.questions.length - 1) {
+    if (currentQuestionIndex < questions.length - 1) {
       setCurrentQuestionIndex(currentQuestionIndex + 1)
       setSelectedAnswer(null)
       setShowResult(false)
     } else {
-      onQuizComplete(score, quizData.questions.length)
+      onQuizComplete(score, questions.length)
     }
   }
 
   const getCorrectAnswer = () => {
-    return currentQuestion.answers.findIndex(answer => answer.correct)
+    return currentQuestion ? currentQuestion.answers.findIndex(answer => answer.correct) : -1
   }
 
-  const progress = ((currentQuestionIndex + 1) / quizData.questions.length) * 100
+  if (!hasQuestions) {
+    return (
+      <div className={`${styles.container} ${gameClass}`}>
+        <div className={styles.questionCard}>
+          <p className={styles.task}>В этой викторине пока нет вопросов.</p>
+          <button
+            type="button"
+            className={styles.nextButton}
+            onClick={() => onQuizComplete(0, 0)}
+          >
+            Вернуться к результатам
+          </button>
+        </div>
+      </div>
+    )
+  }
+
+  const progress = ((currentQuestionIndex + 1) / questions.length) * 100
 
   return (
-    <div className={styles.container}>
+    <div className={`${styles.container} ${gameClass}`}>
       <div className={styles.progressBar}>
-        <div 
-          className={styles.progressFill} 
-          style={{ width: `${progress}%` }}
-        ></div>
+        <div
+          className={styles.progressFill}
+          style={{ '--progress': `${progress}%` }}
+        />
       </div>
 
       <div className={styles.questionCard}>
         <div className={styles.questionHeader}>
           <span className={styles.questionNumber}>
-            Вопрос {currentQuestionIndex + 1} из {quizData.questions.length}
+            Вопрос {currentQuestionIndex + 1} из {questions.length}
           </span>
         </div>
 
         <div className={styles.questionContent}>
-          {quizData.questions[0].task ? (
+          {hasTaskField ? (
             <h2 className={styles.task}>{currentQuestion.task}</h2>
           ) : (
             <>
               <h2 className={styles.work}>{currentQuestion.work}</h2>
               {currentQuestion.image && (
-                <img 
-                  src={currentQuestion.image} 
+                <img
+                  src={currentQuestion.image}
                   alt={currentQuestion.work}
                   className={styles.workImage}
                   onError={(e) => {
@@ -106,7 +128,7 @@ function QuizScreen({ quizData, quizType, onQuizComplete, soundEnabled }) {
             const isSelected = selectedAnswer === index
             const isCorrect = answer.correct
             const correctAnswerIndex = getCorrectAnswer()
-            
+
             let answerClass = styles.answerCard
             if (showResult) {
               if (isCorrect) {
@@ -125,8 +147,8 @@ function QuizScreen({ quizData, quizType, onQuizComplete, soundEnabled }) {
                 onClick={() => handleAnswerSelect(index)}
               >
                 {answer.image && (
-                  <img 
-                    src={answer.image} 
+                  <img
+                    src={answer.image}
                     alt={answer.text}
                     className={styles.answerImage}
                     onError={(e) => {
@@ -140,41 +162,67 @@ function QuizScreen({ quizData, quizType, onQuizComplete, soundEnabled }) {
           })}
         </div>
 
-        {showResult && (
-          <div className={styles.result}>
-            <div className={styles.resultHeader}>
-              {currentQuestion.answers[selectedAnswer]?.correct ? (
-                <span className={styles.resultIcon}>✓</span>
-              ) : (
-                <span className={styles.resultIconWrong}>✗</span>
-              )}
-              <h3 className={styles.resultTitle}>
-                {currentQuestion.answers[selectedAnswer]?.correct 
-                  ? 'Правильно!' 
-                  : 'Неправильно'}
-              </h3>
-            </div>
-            
-            <p className={styles.explanation}>
-              {currentQuestion.answers[selectedAnswer]?.explanation}
-            </p>
-            
-            {currentQuestion.additionalInfo && (
-              <div className={styles.additionalInfo}>
-                <p>{currentQuestion.additionalInfo}</p>
-              </div>
-            )}
+        {showResult && (() => {
+          const selectedAnswerData = selectedAnswer !== null ? currentQuestion.answers[selectedAnswer] : null
+          const placeholderImg = quizType === 'tools'
+            ? '/images/tools/place_holder_img.png'
+            : '/images/sculptures/place_holder_img.png'
+          const resultImageSrc = selectedAnswerData?.image || placeholderImg
+          const isCorrect = currentQuestion.answers[selectedAnswer]?.correct
+          return (
+            <div className={styles.resultSection}>
+              <div className={`${styles.result} ${isCorrect ? styles.result_correct : styles.result_incorrect}`}>
+                <div className={styles.resultContent}>
+                  <div className={styles.resultHeader}>
+                    {currentQuestion.answers[selectedAnswer]?.correct ? (
+                      <span className={styles.resultIcon}>✓</span>
+                    ) : (
+                      <span className={styles.resultIconWrong}>✗</span>
+                    )}
+                    <h3 className={styles.resultTitle}>
+                      {currentQuestion.answers[selectedAnswer]?.correct
+                        ? 'Правильно!'
+                        : 'Неправильно'}
+                    </h3>
+                  </div>
 
-            <button 
-              className={styles.nextButton}
-              onClick={handleNext}
-            >
-              {currentQuestionIndex < quizData.questions.length - 1 
-                ? 'Следующий вопрос' 
-                : 'Завершить викторину'}
-            </button>
-          </div>
-        )}
+                  <p className={styles.explanation}>
+                    {currentQuestion.answers[selectedAnswer]?.explanation}
+                  </p>
+
+                  {currentQuestion.additionalInfo && (
+                    <div className={styles.additionalInfo}>
+                      <p>{currentQuestion.additionalInfo}</p>
+                    </div>
+                  )}
+                </div>
+                <div className={styles.resultImageWrap}>
+                  <img
+                    src={resultImageSrc}
+                    alt={selectedAnswerData?.text || ''}
+                    className={styles.resultImage}
+                    onError={(e) => {
+                      e.target.onerror = null
+                      e.target.src = placeholderImg
+                    }}
+                  />
+                </div>
+              </div>
+
+              <div className={styles.resultButtonWrap}>
+                <button
+                  type="button"
+                  className={styles.nextButton}
+                  onClick={handleNext}
+                >
+                  {currentQuestionIndex < questions.length - 1
+                    ? 'Следующий вопрос'
+                    : 'Завершить викторину'}
+                </button>
+              </div>
+            </div>
+          )
+        })()}
       </div>
     </div>
   )

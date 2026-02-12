@@ -139,6 +139,7 @@ function AdminQuizEditor({ quizType, quizData, onUpdate }) {
       <div className={styles.header}>
         <h2>{quizData.title}</h2>
         <button
+          type="button"
           className={styles.addButton}
           onClick={() => {
             setEditingId(null)
@@ -235,10 +236,10 @@ function AdminQuizEditor({ quizType, quizData, onUpdate }) {
           </div>
 
           <div className={styles.formActions}>
-            <button className={styles.saveButton} onClick={handleSave}>
+            <button type="button" className={styles.saveButton} onClick={handleSave}>
               Сохранить
             </button>
-            <button className={styles.cancelButton} onClick={handleCancel}>
+            <button type="button" className={styles.cancelButton} onClick={handleCancel}>
               Отмена
             </button>
           </div>
@@ -252,12 +253,14 @@ function AdminQuizEditor({ quizType, quizData, onUpdate }) {
               <span className={styles.questionId}>#{question.id}</span>
               <div className={styles.questionActions}>
                 <button
+                  type="button"
                   className={styles.editButton}
                   onClick={() => handleEdit(question)}
                 >
                   ✏️ Редактировать
                 </button>
                 <button
+                  type="button"
                   className={styles.deleteButton}
                   onClick={() => handleDelete(question.id)}
                 >

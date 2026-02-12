@@ -65,20 +65,22 @@ function App() {
       setGameState(GAME_STATES.START)
     } catch (error) {
       console.error('Error loading quiz data:', error)
-      // Если данные не загрузились, используем заглушку
-      const fallbackData = quizId === 'tools' 
+      const fallbackData = quizId === 'tools'
         ? {
-            title: "Узнай инструмент по описанию",
-            subtitle: "Какой инструмент нужен для этой задачи?",
+            title: 'Узнай инструмент по описанию',
+            subtitle: 'Какой инструмент нужен для этой задачи?',
             questions: []
           }
         : {
-            title: "Угадай скульптора по произведению",
-            subtitle: "Кто автор этого произведения?",
+            title: 'Угадай скульптора по произведению',
+            subtitle: 'Кто автор этого произведения?',
             questions: []
           }
       setQuizData(fallbackData)
       setGameState(GAME_STATES.START)
+      if (fallbackData.questions.length === 0) {
+        alert('Не удалось загрузить вопросы. Попробуйте позже или проверьте подключение.')
+      }
     }
   }
 

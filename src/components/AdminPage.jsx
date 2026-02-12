@@ -122,7 +122,8 @@ function AdminPage() {
     <div className={styles.container}>
       <div className={styles.header}>
         <h1 className={styles.title}>Административная панель</h1>
-        <button 
+        <button
+          type="button"
           className={styles.refreshButton}
           onClick={loadData}
         >
@@ -138,18 +139,21 @@ function AdminPage() {
 
       <div className={styles.tabs}>
         <button
+          type="button"
           className={`${styles.tab} ${activeTab === 'tools' ? styles.active : ''}`}
           onClick={() => setActiveTab('tools')}
         >
           🔨 Инструменты
         </button>
         <button
+          type="button"
           className={`${styles.tab} ${activeTab === 'sculptors' ? styles.active : ''}`}
           onClick={() => setActiveTab('sculptors')}
         >
           🎨 Скульпторы
         </button>
         <button
+          type="button"
           className={`${styles.tab} ${activeTab === 'statistics' ? styles.active : ''}`}
           onClick={() => setActiveTab('statistics')}
         >

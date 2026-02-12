@@ -1,33 +1,54 @@
 .container {
   min-height: 100vh;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   padding: 20px;
+  position: relative;
+}
+
+/* Классы для викторины инструментов и викторины скульптора */
+.game_tool {
+  background-image: url('../assets/game_tool_img.png');
+  background-size: cover;
+  background-position: center 20%; 
+}
+
+.game_sculptor {
+  background-image: url('../assets/game_sculptor_img.png');
+  background-size: cover;
+  background-position: center 20%;
 }
 
 .progressBar {
   width: 100%;
   max-width: 1200px;
-  height: 8px;
-  background: rgba(255, 255, 255, 0.3);
-  border-radius: 4px;
+  height: 16px;
+  background: #C7AF8A;
+  background: linear-gradient(0deg,rgba(199, 175, 138, 1) 0%, rgba(97, 85, 67, 1) 100%);
+  border-radius: 12px;
   margin: 0 auto 30px;
+  margin-top: 50px;
   overflow: hidden;
+  position: relative;
+  z-index: 1;
 }
 
 .progressFill {
   height: 100%;
-  background: white;
+  width: var(--progress, 0);
+  background: #5D1E00;
   transition: width 0.3s ease;
-  border-radius: 4px;
+  border-radius: 12px;
 }
 
 .questionCard {
-  max-width: 1200px;
+  max-width: 1400px;
   margin: 0 auto;
-  background: white;
+  background: #F3E5CF;
+  background: linear-gradient(0deg,rgba(243, 229, 207, 1) 0%, rgba(222, 192, 150, 1) 100%);
   border-radius: 16px;
   padding: 40px;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  position: relative;
+  z-index: 1;
 }
 
 .questionHeader {
@@ -38,7 +59,7 @@
 }
 
 .questionNumber {
-  color: #666;
+  color: #1C1C1C;
   font-size: 0.9rem;
   font-weight: 600;
 }
@@ -50,10 +71,11 @@
 
 .task {
   font-size: 1.8rem;
-  color: #333;
+  color: #453A26;
   font-weight: 600;
   margin: 0;
   line-height: 1.4;
+  text-transform: uppercase;
 }
 
 .work {
@@ -76,16 +98,18 @@
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   gap: 20px;
   margin-bottom: 30px;
+  background-size: cover;
+  background-position: center;
 }
 
 .answerCard {
-  border: 2px solid #e0e0e0;
-  border-radius: 12px;
+  border: 2px solid #5D1E00;
+  border-radius: 2px;
   padding: 20px;
   cursor: pointer;
   transition: all 0.3s;
   text-align: center;
-  background: white;
+  background: rgb(93, 30, 0, 15%);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -93,19 +117,18 @@
 }
 
 .answerCard:hover {
-  border-color: #667eea;
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
 }
 
 .answerCard.correct {
   border-color: #4caf50;
-  background: #e8f5e9;
+  background: rgb(33, 183, 50, 30%);
 }
 
 .answerCard.incorrect {
-  border-color: #f44336;
-  background: #ffebee;
+  border-color: #5D1E00;
+  background: #5D1E00;
+  
 }
 
 .answerImage {
@@ -120,15 +143,58 @@
 .answerText {
   font-size: 1.1rem;
   font-weight: 600;
-  color: #333;
+  color: #221102;
+  text-transform: uppercase;
+}
+
+.answerCard.incorrect .answerText {
+  color: #fff;
 }
 
 .result {
   margin-top: 30px;
   padding: 30px;
-  background: #f8f9fa;
   border-radius: 12px;
   animation: slideIn 0.3s ease;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 24px;
+}
+
+.result_correct {
+  background: #AFAC8A;
+}
+
+.result_correct .resultTitle,
+.result_correct .explanation,
+.result_correct .additionalInfo::before,
+.result_correct .additionalInfo p {
+  color: #453A26;
+}
+
+.result_incorrect {
+  background: #663D3C;
+}
+
+.resultImageWrap {
+  flex: 0 0 auto;
+}
+
+.resultImage {
+  width: 240px;
+  height: 240px;
+  object-fit: cover;
+  border-radius: 12px;
+  border: solid #CBB495 2px;
+  display: block;
+  background: #fff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.resultContent {
+  flex: 1;
+  min-width: 200px;
 }
 
 @keyframes slideIn {
@@ -177,41 +243,75 @@
 
 .resultTitle {
   font-size: 1.5rem;
-  color: #333;
+  color: #CBB495;
   margin: 0;
+  text-transform: uppercase;
 }
 
 .explanation {
   font-size: 1.1rem;
-  color: #555;
+  color: #CBB495;
   line-height: 1.6;
   margin: 0 0 20px 0;
+  text-transform: uppercase;
 }
 
 .additionalInfo {
   margin-top: 20px;
   padding: 20px;
-  background: white;
-  border-left: 4px solid #667eea;
   border-radius: 4px;
+  font-family: 'Raleway', sans-serif;
+}
+
+.additionalInfo::before {
+  content: 'Историческая справка';
+  display: block;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 10px;
+  font-style: normal;
+  text-transform: uppercase;
+  font-family: 'Raleway', sans-serif;
 }
 
 .additionalInfo p {
   margin: 0;
-  color: #666;
-  font-size: 1rem;
+  color: #fff;
+  font-size: 18px;
   line-height: 1.6;
   font-style: italic;
 }
 
+.resultSection {
+  margin-top: 30px;
+  padding-bottom: 36px;
+}
+
+.resultButtonWrap {
+  position: absolute;
+  bottom: -24px;
+  left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
+}
+
+.resultButtonWrap .nextButton {
+  width: auto;
+  min-width: 260px;
+  margin: 0;
+}
+
 .nextButton {
+  font-family: 'Anticva', sans-serif;
   width: 100%;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
+  background: #5D1E00;
+  text-transform: uppercase;
+  color: #FFE7C8;
   border: none;
   padding: 16px 32px;
   font-size: 1.1rem;
-  border-radius: 8px;
+  border-radius: 2px;
   cursor: pointer;
   font-weight: 600;
   transition: transform 0.2s, box-shadow 0.2s;
@@ -220,7 +320,6 @@
 
 .nextButton:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
 }
 
 .nextButton:active {
